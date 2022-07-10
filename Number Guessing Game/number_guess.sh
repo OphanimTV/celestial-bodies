@@ -44,23 +44,19 @@ fi
 echo "Enter your username:"
 read USERNAME
 
-GUESSER=$($PSQL "SELECT * FROM guesser WHERE username = '$USERNAME'")
+IFS="|" read GAMES_PLAYED BEST_GAME <<< $($PSQL "SELECT games_played, best_game FROM guesser WHERE username = '$USERNAME'")
 
-if [[ -z $GUESSER ]]
+if [[ -z $GAMES_PLAYED ]]
 then
   echo "Welcome, $USERNAME! It looks like this is your first time here."
   INSERT_USER_RESULT=$($PSQL "INSERT INTO guesser(username, games_played, best_game) VALUES('$USERNAME', 1, 0)")
 else
-  echo "$GUESSER" | while IFS="|" read USERNAME GAMES_PLAYED BEST_GAME
-  do
-    echo "Welcome back, $USERNAME! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
-  done  
-fi
+  echo "Welcome back, $USERNAME! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
 
-#Update number of games played
-GAMES_PLAYED=$($PSQL "SELECT games_played FROM guesser WHERE username = '$USERNAME'")
-let GAMES_PLAYED++   
-UPDATE_GAMES_PLAYED_RESULT=$($PSQL "UPDATE guesser SET games_played = '$GAMES_PLAYED' WHERE username = '$USERNAME'")
+  #Update number of games played
+  let GAMES_PLAYED++   
+  UPDATE_GAMES_PLAYED_RESULT=$($PSQL "UPDATE guesser SET games_played = '$GAMES_PLAYED' WHERE username = '$USERNAME'") 
+fi
 
 echo "Guess the secret number between 1 and 1000:"
 
