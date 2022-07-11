@@ -44,31 +44,29 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: guesser; Type: TABLE; Schema: public; Owner: freecodecamp
+-- Name: users; Type: TABLE; Schema: public; Owner: freecodecamp
 --
 
-CREATE TABLE public.guesser (
+CREATE TABLE public.users (
     username character varying(16) NOT NULL,
-    games_played integer,
-    best_game integer
+    games_played integer DEFAULT 0 NOT NULL,
+    best_game integer DEFAULT 0 NOT NULL
 );
 
 
-ALTER TABLE public.guesser OWNER TO freecodecamp;
+ALTER TABLE public.users OWNER TO freecodecamp;
 
 --
--- Data for Name: guesser; Type: TABLE DATA; Schema: public; Owner: freecodecamp
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
-INSERT INTO public.guesser VALUES ('David', 1, 10);
-INSERT INTO public.guesser VALUES ('Octavio', 1, 8);
 
 
 --
--- Name: guesser guesser_username_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+-- Name: users guesser_username_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
-ALTER TABLE ONLY public.guesser
+ALTER TABLE ONLY public.users
     ADD CONSTRAINT guesser_username_key UNIQUE (username);
 
 
